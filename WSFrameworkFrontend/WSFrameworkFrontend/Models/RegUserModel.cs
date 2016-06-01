@@ -19,15 +19,16 @@ namespace WSFrameworkFrontend.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         [Required]
+        [Display(Name = "Your Email")]
         public string Email { get; set; }
 
         [Required]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Your Phone Number")]
         public string PhoneNumber { get; set; }
     }
 }

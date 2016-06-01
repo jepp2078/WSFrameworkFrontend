@@ -14,5 +14,13 @@ namespace WSFrameworkFrontend
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
+
+        protected void Session_Start()
+        {
+            var cookie = Request.Cookies["AccessToken"];
+
+            if (cookie != null && cookie.Value != null)
+                Session["AccessToken"] = cookie.Value;
+        }
     }
 }

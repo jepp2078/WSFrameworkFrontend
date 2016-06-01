@@ -29,3 +29,5 @@ c:\users\jepp2078\documents\WsFrameworkFrontend\WSFrameworkFrontend\WSFrameworkF
 c:\users\jepp2078\documents\WsFrameworkFrontend\WSFrameworkFrontend\WSFrameworkFrontend.Tests\obj\Debug\WSFrameworkFrontend.Tests.csprojResolveAssemblyReference.cache
 c:\users\jepp2078\documents\WsFrameworkFrontend\WSFrameworkFrontend\WSFrameworkFrontend.Tests\obj\Debug\WSFrameworkFrontend.Tests.dll
 c:\users\jepp2078\documents\WsFrameworkFrontend\WSFrameworkFrontend\WSFrameworkFrontend.Tests\obj\Debug\WSFrameworkFrontend.Tests.pdb
+C:\Users\Jepp2078\Documents\WSFrameworkFrontend\WSFrameworkFrontend\WSFrameworkFrontend.Tests\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Jepp2078\Documents\WSFrameworkFrontend\WSFrameworkFrontend\WSFrameworkFrontend.Tests\bin\Debug\Newtonsoft.Json.xml

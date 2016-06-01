@@ -3,10 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - WSFramework - Frontend</title>
+    <title>@ViewBag.Title - WSFramework</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -17,23 +23,39 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("WSFramework - Frontend", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("WSFramework", "Index", "Home", new { area = "" }, new { @class = "navbar-brand navbar-title" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                 </ul>
+
+                <ul class="nav navbar-nav pull-right">
+                    @if (Session["AccessToken"] != null)
+                    {
+                        <li><a href="#" onclick="location.href='@Url.Action("Logout", "Login")'">Log out</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="#" onclick="location.href='@Url.Action("Index", "Login")'">Log In</a></li>
+                    }
+                </ul>
             </div>
         </div>
     </div>
-
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - WSFramework - Frontend</p>
+            <p>&copy; @DateTime.Now.Year - WSFramework</p>
         </footer>
     </div>
-
+    <script>
+        $('#logOut').on('click', function (event) {
+            console.log("test");
+            document.cookie = "AccessToken" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        });
+    </script>
+                    }
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 </body>

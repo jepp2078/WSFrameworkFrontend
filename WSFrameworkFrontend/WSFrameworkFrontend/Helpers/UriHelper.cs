@@ -7,7 +7,7 @@ namespace WSFrameworkFrontend.Helpers
 {
     public static class UriHelper
     {
-        private static readonly string uri = "http://localhost:54454";
+        private static readonly string uri = "http://localhost:54454/";
 
         public static string getUri()
         {

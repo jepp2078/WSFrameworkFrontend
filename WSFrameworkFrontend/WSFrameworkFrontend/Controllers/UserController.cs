@@ -5,14 +5,14 @@ using WSFrameworkFrontend.Services;
 
 namespace WSFrameworkFrontend.Controllers
 {
-    public class RegUserController : Controller
+    public class UserController : Controller
     {
         private RegUserRESTService service = new RegUserRESTService();
-        
-        //GET: /RegUserPage/
-        public ActionResult RegUserPage()
+
+        [HttpGet]
+        public ActionResult Create()
         {
-            return View();
+            return View("Create");
         }
 
         [HttpPost]
@@ -31,8 +31,7 @@ namespace WSFrameworkFrontend.Controllers
             {
                 user.Password = null;
                 user.ConfirmPassword = null;
-                
-                return View("RegUserPage",user);
+                return View("~/Views/Home/Splash.cshtml", user);
             }
             
         }

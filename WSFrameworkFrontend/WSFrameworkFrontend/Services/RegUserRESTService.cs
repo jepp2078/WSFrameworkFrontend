@@ -19,7 +19,7 @@ namespace WSFrameworkFrontend.Services
             {
                 string content = JsonConvert.SerializeObject(user).ToString();
                 var stringContent = new StringContent(content, Encoding.UTF8,"application/json");
-                var response = await httpClient.PostAsync(uri + "/Users/Register", stringContent);
+                var response = await httpClient.PostAsync(uri + "Users/Register", stringContent);
                 return response;
             }
         }
