@@ -3,37 +3,43 @@
 @{
     ViewBag.Title = "Success";
 }
+<div class="container body-content" style="background:white">
+    <h2>Success</h2>
 
-<h2>Success</h2>
+    <div>
+        <h4>User created with following data:</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.UserName)
+            </dt>
 
-<div>
-    <h4>User created with following data:</h4>
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+        </dl>
+        <hr />
+    </div>
+    <p>
+        <a href="/Login/Index">Login</a>
+    </p>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-    </dl>
+    <footer style="text-align:center">
+        <p>@DateTime.Now.Year - WSFramework - By Jeppe Johansen</p>
+    </footer>
 </div>
-<p>
-    @Html.ActionLink("Back to List", "Index")
-</p>

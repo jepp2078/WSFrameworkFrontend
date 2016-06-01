@@ -9,12 +9,6 @@ namespace WSFrameworkFrontend.Controllers
     {
         private RegUserRESTService service = new RegUserRESTService();
 
-        [HttpGet]
-        public ActionResult Create()
-        {
-            return View("Create");
-        }
-
         [HttpPost]
         public async Task<ActionResult> Create(RegUserModel user)
         {

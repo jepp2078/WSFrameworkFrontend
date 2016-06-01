@@ -1,12 +1,14 @@
 ﻿@{
     ViewBag.Title = "Login failed";
 }
+<div class="container body-content" style="background:white">
 
-<h2>Login failed</h2>
+    <h2>Login failed</h2>
 
-<div>
-    <h4>Login information incorrect</h4>
+    <div>
+        <h4>Login information incorrect</h4>
+    </div>
+    <p>
+        @Html.ActionLink("Back to login page", "Index")
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Back to login page", "Index")
-</p>

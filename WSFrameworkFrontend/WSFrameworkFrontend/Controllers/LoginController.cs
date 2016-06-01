@@ -45,7 +45,7 @@ namespace WSFrameworkFrontend.Controllers
                 var c = new HttpCookie("AccessToken");
                 c.Expires = DateTime.Now.AddDays(-1);
                 Response.Cookies.Add(c);
-                Session["AccessToken"] = null;
+                System.Web.HttpContext.Current.Session["AccessToken"] = null;
             }
             return Redirect("/login/index");
         }

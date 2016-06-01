@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WSFrameworkFrontend.Models.ShopModel>
+
+@{
+    ViewBag.Title = "Browse";
+}
+<div class="container body-content" style="background:white">
+
+    <h2>Browse Webshops</h2>
+
+    <p>
+        @Html.ActionLink("Create your own Webshop", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Views)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Views)
+                </td>
+                <td>
+                    @Html.ActionLink("View Webshop", "ViewShop", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
