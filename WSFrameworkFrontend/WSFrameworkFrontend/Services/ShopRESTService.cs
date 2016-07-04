@@ -54,18 +54,18 @@ namespace WSFrameworkFrontend.Services
 
                 dynamic json = JsonConvert.DeserializeObject(shopResponse);
 
-                ShopModel shopResponseOut = new ShopModel();
-                shopResponseOut.Id = Convert.ToInt64(json["Id"]);
-                shopResponseOut.UserId = json["UserId"].ToString();
-                shopResponseOut.Title = json["Title"].ToString();
-                shopResponseOut.Description = json["Description"].ToString();
-                shopResponseOut.DescriptionFull = json["DescriptionFull"].ToString();
-                shopResponseOut.Views = Convert.ToInt64(json["Views"]);
-                shopResponseOut.IsActive = Convert.ToInt32(json["IsActive"]);
-                shopResponseOut.CreatedAt = DateTime.Parse(json["CreatedAt"].ToString());
-                shopResponseOut.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
+                ShopModel Shop = new ShopModel();
+                Shop.Id = Convert.ToInt64(json["Id"]);
+                Shop.UserId = json["UserId"].ToString();
+                Shop.Title = json["Title"].ToString();
+                Shop.Description = json["Description"].ToString();
+                Shop.DescriptionFull = json["DescriptionFull"].ToString();
+                Shop.Views = Convert.ToInt64(json["Views"]);
+                Shop.IsActive = Convert.ToInt32(json["IsActive"]);
+                Shop.CreatedAt = DateTime.Parse(json["CreatedAt"].ToString());
+                Shop.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
 
-                return shopResponseOut;
+                return Shop;
             }
         }
 
@@ -115,18 +115,18 @@ namespace WSFrameworkFrontend.Services
 
                 dynamic json = JsonConvert.DeserializeObject(shopResponse);
 
-                ShopModel shopResponseOut = new ShopModel();
-                shopResponseOut.Id = Convert.ToInt64(json["Id"]);
-                shopResponseOut.UserId = json["UserId"].ToString();
-                shopResponseOut.Title = json["Title"].ToString();
-                shopResponseOut.Description = json["Description"].ToString();
-                shopResponseOut.DescriptionFull = json["DescriptionFull"].ToString();
-                shopResponseOut.Views = Convert.ToInt64(json["Views"]);
-                shopResponseOut.IsActive = Convert.ToInt32(json["IsActive"]);
-                shopResponseOut.CreatedAt = DateTime.Parse(json["CreatedAt"].ToString());
-                shopResponseOut.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
+                ShopModel Shop = new ShopModel();
+                Shop.Id = Convert.ToInt64(json["Id"]);
+                Shop.UserId = json["UserId"].ToString();
+                Shop.Title = json["Title"].ToString();
+                Shop.Description = json["Description"].ToString();
+                Shop.DescriptionFull = json["DescriptionFull"].ToString();
+                Shop.Views = Convert.ToInt64(json["Views"]);
+                Shop.IsActive = Convert.ToInt32(json["IsActive"]);
+                Shop.CreatedAt = DateTime.Parse(json["CreatedAt"].ToString());
+                Shop.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
 
-                return shopResponseOut;
+                return Shop;
             }
         }
 
@@ -148,17 +148,17 @@ namespace WSFrameworkFrontend.Services
                 IList<ShopModel> shops = new List<ShopModel>();
                 foreach (var shop in json)
                 {
-                    ShopModel shopResponseOut = new ShopModel();
-                    shopResponseOut.Id = Convert.ToInt64(shop["Id"]);
-                    shopResponseOut.UserId = shop["UserId"].ToString();
-                    shopResponseOut.Title = shop["Title"].ToString();
-                    shopResponseOut.Description = shop["Description"].ToString();
-                    shopResponseOut.DescriptionFull = shop["DescriptionFull"].ToString();
-                    shopResponseOut.Views = Convert.ToInt64(shop["Views"]);
-                    shopResponseOut.IsActive = Convert.ToInt32(shop["IsActive"]);
-                    shopResponseOut.CreatedAt = DateTime.Parse(shop["CreatedAt"].ToString());
-                    shopResponseOut.UpdatedAt = DateTime.Parse(shop["UpdatedAt"].ToString());
-                    shops.Add(shopResponseOut);
+                    ShopModel Shop = new ShopModel();
+                    Shop.Id = Convert.ToInt64(shop["Id"]);
+                    Shop.UserId = shop["UserId"].ToString();
+                    Shop.Title = shop["Title"].ToString();
+                    Shop.Description = shop["Description"].ToString();
+                    Shop.DescriptionFull = shop["DescriptionFull"].ToString();
+                    Shop.Views = Convert.ToInt64(shop["Views"]);
+                    Shop.IsActive = Convert.ToInt32(shop["IsActive"]);
+                    Shop.CreatedAt = DateTime.Parse(shop["CreatedAt"].ToString());
+                    Shop.UpdatedAt = DateTime.Parse(shop["UpdatedAt"].ToString());
+                    shops.Add(Shop);
                 }
 
                 return shops;

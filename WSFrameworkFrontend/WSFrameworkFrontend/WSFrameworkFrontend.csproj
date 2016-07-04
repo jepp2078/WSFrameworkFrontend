@@ -140,6 +140,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -158,7 +159,9 @@
     <Compile Include="Models\ShopModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CategoryRESTService.cs" />
     <Compile Include="Services\LoginRESTService.cs" />
+    <Compile Include="Services\ProductRESTService.cs" />
     <Compile Include="Services\RegUserRESTService.cs" />
     <Compile Include="Services\ShopRESTService.cs" />
   </ItemGroup>
@@ -175,6 +178,9 @@
     <Content Include="Views\Shop\Edit.cshtml" />
     <Content Include="Views\Shop\Failure.cshtml" />
     <Content Include="Views\Shop\Browse.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Success.cshtml" />
+    <Content Include="Views\Product\Browse.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

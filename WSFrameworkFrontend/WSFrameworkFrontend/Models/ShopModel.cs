@@ -14,7 +14,7 @@ namespace WSFrameworkFrontend.Models
         public string UserId { get; set; }
         public string Title { get; set; }
         [DataType(DataType.MultilineText)]
-        [Display(Name = "Short Description")]
+        [Display(Name = "Description")]
         public string Description { get; set; }
         [DataType(DataType.MultilineText)]
         [Display(Name = "Full Description")]
