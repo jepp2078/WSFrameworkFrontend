@@ -1,14 +1,13 @@
-﻿@model WSFrameworkFrontend.Models.ProductModel
+﻿@model WSFrameworkFrontend.Models.ProductCreateViewModel
 
 @{
     ViewBag.Title = "Success";
 }
 <div class="container body-content" style="background:white">
     <h2>Success</h2>
-
     <div>
-        <h4>Product created with following data:</h4>
         <hr />
+
         <dl class="dl-horizontal">
             <dt>
                 @Html.DisplayNameFor(model => model.Title)
@@ -74,14 +73,6 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.ShopId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.ShopId)
-            </dd>
-
-            <dt>
                 @Html.DisplayNameFor(model => model.Stock)
             </dt>
 
@@ -97,6 +88,30 @@
                 @Html.DisplayFor(model => model.Price)
             </dd>
 
+            <dt>
+                @Html.DisplayNameFor(model => model.Image)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Image.ImageUrl)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </dt>
+
+            <dd>
+               @for (int i = 0; i < Model.CategoryName.Count; i++)
+               {
+                @Html.DisplayFor(model => model.CategoryName[i])
+                <br />
+               }
+            </dd>
+
         </dl>
     </div>
+    <p>
+        @Html.ActionLink("Create New Product", "Create")
+        <br />
+        @Html.ActionLink("View Your Products", "Browse")
 </div>

@@ -1,17 +1,59 @@
 ﻿@model WSFrameworkFrontend.Models.ProductCreateViewModel
 
 @{
-    ViewBag.Title = "Create Product";
+    ViewBag.Title = "Edit";
 }
 <div class="container body-content" style="background:white">
-    <h2>Create Product</h2>
 
-    @using (Html.BeginForm())
+    <h2>Edit Product</h2>
+    <h4>Current information</h4>
+    @if (Model.IsActive == 0)
     {
+        using (Html.BeginForm("Activate", "Product"))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.IsActive)
+                @Html.HiddenFor(model => model.Stock)
+                @Html.HiddenFor(model => model.Image)
+                @Html.HiddenFor(model => model.Category)
+                <div>
+                    <input type="submit" value="Set Visible" class="btn btn-info" />
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("Activate", "Product"))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.IsActive)
+                @Html.HiddenFor(model => model.Stock)
+                @Html.HiddenFor(model => model.Image)
+                @Html.HiddenFor(model => model.Category)
+                <div>
+                    <input type="submit" value="Set Invisible" class="btn btn-warning" />
+                </div>
+            </div>
+        }
+    }
+
+    <hr />
+    @using (Html.BeginForm("Edit","Product"))
+    { 
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.IsActive)
+
             <div class="form-group">
                 @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -72,9 +114,24 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value="Save" class="btn btn-default" />
                 </div>
             </div>
         </div>
     }
+            <hr />
+            @using (Html.BeginForm("Delete", "product"))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="submit" value="Delete" class="btn btn-danger pull-left" />
+                        </div>
+                    </div>
+                </div>
+            }
+            
 </div>

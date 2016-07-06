@@ -35,8 +35,8 @@ namespace WSFrameworkFrontend.Controllers
         public async Task<ActionResult> Create()
         {
             List<category> categories = new List<category>();
-            IList<CategoryModel> test = await categoryService.GetAllCategories();
-            foreach (var category in test)
+            IList<CategoryModel> currentCategories = await categoryService.GetAllCategories();
+            foreach (var category in currentCategories)
             {
                 category categoryToAdd = new category();
                 categoryToAdd.Id = category.Id;
@@ -49,19 +49,14 @@ namespace WSFrameworkFrontend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateProductModel product)
+        public async Task<ActionResult> Create(ProductCreateViewModel product)
         {
-            ProductModel productOut = new ProductModel();
-            productOut.Title = product.Title;
-            productOut.Description = product.Description;
-            productOut.DescriptionFull = product.DescriptionFull;
-            productOut.Stock = product.Stock;
-            productOut.Price = product.Price;
             long shopId = (await shopService.GetOwnShop()).Id;
-            var response = await productService.CreateProduct(productOut, product.ImageUrl, product.CategoryId, shopId);
+            var response = await productService.CreateProduct(product, shopId);
             if (response != null)
             {
-                return View("Success", response);
+                var responseAfterCreate = await productService.getProduct(response.Id);
+                return View("Success", responseAfterCreate);
             }
             else
             {
@@ -76,15 +71,106 @@ namespace WSFrameworkFrontend.Controllers
                 }
 
                 ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
-                productOut.Title = null;
-                return View("Create", productOut);
+                product.Title = null;
+                return View("Create", product);
             }
+
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(long Id)
+        {
+            var response = await productService.getProduct(Id);
+            if (response == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "Product not found.";
+                return View("Failure", resp);
+            }
+            List<category> categories = new List<category>();
+            IList<CategoryModel> test = await categoryService.GetAllCategories();
+            foreach (var category in test)
+            {
+                category categoryToAdd = new category();
+                categoryToAdd.Id = category.Id;
+                categoryToAdd.name = category.Title;
+                categories.Add(categoryToAdd);
+            }
+
+            ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
+            return View("Edit", response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(ProductCreateViewModel productForEdit)
+        {
+            var response = await productService.EditProduct(productForEdit);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseAfterPut = await productService.getProduct(productForEdit.Id);
+                return View("Success", responseAfterPut);
+            }
+            HttpResponseModel resp = new HttpResponseModel();
+            resp.ReasonMessage = response.ReasonPhrase;
+            return View("Failure", resp);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Activate(ProductCreateViewModel productForActivation)
+        {
+            if (productForActivation.IsActive == 0)
+            {
+                productForActivation.IsActive = 1;
+            }
+            else
+            {
+                productForActivation.IsActive = 0;
+
+            }
+
+            var response = await productService.ActivateProduct(productForActivation);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseAfterPut = await productService.getProduct(productForActivation.Id);
+                return View("Success", responseAfterPut);
+            }
+            HttpResponseModel resp = new HttpResponseModel();
+            resp.ReasonMessage = response.ReasonPhrase;
+            return View("Failure", resp);
         }
 
         [HttpGet]
         public async Task<ActionResult> Browse()
         {
             return View(await productService.GetOwnProducts());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(ProductCreateViewModel product)
+        {
+            var response = await productService.DeleteProduct(product);
+            if (response.IsSuccessStatusCode)
+            {
+                List<category> categories = new List<category>();
+                IList<CategoryModel> test = await categoryService.GetAllCategories();
+                foreach (var category in test)
+                {
+                    category categoryToAdd = new category();
+                    categoryToAdd.Id = category.Id;
+                    categoryToAdd.name = category.Title;
+                    categories.Add(categoryToAdd);
+                }
+
+                ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
+                return View("Create");
+            }
+            else
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = response.ReasonPhrase;
+                return View("Failure", resp);
+            }
+
         }
     }
 }

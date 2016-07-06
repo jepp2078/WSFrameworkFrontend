@@ -152,6 +152,7 @@
     <Compile Include="Models\HttpResponseModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
+    <Compile Include="Models\ProductCreateViewModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\LoginUserModel.cs" />
     <Compile Include="Models\RegUserModel.cs" />
@@ -181,6 +182,8 @@
     <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\Success.cshtml" />
     <Content Include="Views\Product\Browse.cshtml" />
+    <Content Include="Views\Product\Failure.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
