@@ -61,7 +61,7 @@
                 <ul class="nav navbar-nav pull-right">
                     @if (Session["AccessToken"] != null)
                     {
-                        <li><a href="#" onclick="location.href='@Url.Action("Logout", "Login")'">Log out</a></li>
+                        <li><a href="#" onclick="location.href='@Url.Action("Logout", "Login")'">Log out (@HttpContext.Current.Session["UserName"].ToString())</a></li>
                     }
                     else
                     {

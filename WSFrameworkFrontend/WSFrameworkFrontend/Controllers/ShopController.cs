@@ -22,33 +22,50 @@ namespace WSFrameworkFrontend.Controllers
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            var response = await service.GetOwnShop();
-            if (response == null)
+            if (IsUserLoggedIn())
             {
-                return View();
+                var response = await service.GetOwnShop();
+                if (response == null)
+                {
+                    return View();
+                }
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "Webshop already present on account. Delete old webshop to create a new one.";
+                return View("Failure", resp);
             }
-            HttpResponseModel resp = new HttpResponseModel();
-            resp.ReasonMessage = "Webshop already present on account. Delete old webshop to create a new one.";
-            return View("Failure", resp);
+            else
+            {
+                return Redirect("/login/index");
+            }
         }
 
         [HttpGet]
         public async  Task<ActionResult> Browse()
         {
-            return View(await service.GetAllShops());
+            if (IsUserLoggedIn())
+                return View(await service.GetAllShops());
+            else
+                return Redirect("/login/index");
         }
 
         [HttpGet]
         public async Task<ActionResult> Edit()
         {
-            var response = await service.GetOwnShop();
-            if(response == null)
+            if (IsUserLoggedIn())
             {
-                HttpResponseModel resp = new HttpResponseModel();
-                resp.ReasonMessage = "No webshop present on account.";
-                return View("Failure", resp);
+                var response = await service.GetOwnShop();
+                if (response == null)
+                {
+                    HttpResponseModel resp = new HttpResponseModel();
+                    resp.ReasonMessage = "No webshop present on account.";
+                    return View("Failure", resp);
+                }
+                return View("Edit", response);
             }
-            return View("Edit", response);
+            else
+            {
+                return Redirect("/login/index");
+            }
         }
 
         [HttpPost]
@@ -120,6 +137,15 @@ namespace WSFrameworkFrontend.Controllers
                 return View("Failure", resp);
             }
 
+        }
+
+        public bool IsUserLoggedIn()
+        {
+            if (System.Web.HttpContext.Current.Session["AccessToken"] == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

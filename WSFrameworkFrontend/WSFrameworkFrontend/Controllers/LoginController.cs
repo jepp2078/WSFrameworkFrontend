@@ -34,6 +34,16 @@ namespace WSFrameworkFrontend.Controllers
             });
 
             System.Web.HttpContext.Current.Session["AccessToken"] = tokenIn[0];
+
+            System.Web.HttpContext.Current.Response.Cookies.Add(new HttpCookie("UserName")
+            {
+                Value = user.UserName,
+                HttpOnly = true,
+                Expires = DateTime.Now.AddSeconds(Convert.ToDouble(tokenIn[1])) //TODO: Tokens now expire in UTC time
+            });
+
+            System.Web.HttpContext.Current.Session["UserName"] = user.UserName;
+
             return Redirect("/home/index");
         }
 
@@ -46,6 +56,13 @@ namespace WSFrameworkFrontend.Controllers
                 c.Expires = DateTime.Now.AddDays(-1);
                 Response.Cookies.Add(c);
                 System.Web.HttpContext.Current.Session["AccessToken"] = null;
+            }
+            if (Request.Cookies["UserName"] != null)
+            {
+                var c = new HttpCookie("UserName");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+                System.Web.HttpContext.Current.Session["UserName"] = null;
             }
             return Redirect("/login/index");
         }

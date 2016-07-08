@@ -91,7 +91,7 @@ namespace WSFrameworkFrontend.Services
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
 
-                var response = await httpClient.GetAsync(uri + "Products/"+id);
+                var response = await httpClient.GetAsync(uri + "Products/"+id+"/Details");
                 if (response.IsSuccessStatusCode != true)
                 {
                     return null;

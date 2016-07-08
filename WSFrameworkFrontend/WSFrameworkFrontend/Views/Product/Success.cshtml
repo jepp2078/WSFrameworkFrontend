@@ -110,8 +110,10 @@
 
         </dl>
     </div>
+    <hr />
     <p>
-        @Html.ActionLink("Create New Product", "Create")
-        <br />
+        @Html.ActionLink("Create New Product", "Create") |
+        @Html.ActionLink("View Product", "Details", new { Id = Model.Id }) |
         @Html.ActionLink("View Your Products", "Browse")
+    </p>
 </div>

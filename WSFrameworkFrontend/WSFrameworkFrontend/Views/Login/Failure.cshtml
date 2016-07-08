@@ -1,14 +1,69 @@
-﻿@{
-    ViewBag.Title = "Login failed";
+﻿
+@{
+    ViewBag.Title = "Login";
 }
-<div class="container body-content" style="background:white">
+@{
+    Layout = "";
+}
 
-    <h2>Login failed</h2>
+<head>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $(window).load(function(){
+        $('#login-modal').modal('show');
+    });
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
 
-    <div>
-        <h4>Login information incorrect</h4>
+    <link rel="stylesheet" type="text/css" href="~/Content/index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row main">
+            <div class="panel-heading">
+                <div class="panel-title text-center">
+                    <h1 class="title">WSFramework</h1>
+                    <hr />
+                </div>
+                <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="loginmodal-container">
+                            <h1>Login to Your Account</h1>
+                            <i style="color:red;text-align:center;display: block">Login information incorrect!</i>
+                            <br>
+                            @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+                            {
+                                @model WSFrameworkFrontend.Models.LoginUserModel
+
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @placeholder = "Username" } })
+                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Password" } })
+                                <input type="submit" name="login" class="login loginmodal-submit" value="Login">
+                            }
+
+                            <div class="login-help">
+                                <a href="/">Register</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <p>
-        @Html.ActionLink("Back to login page", "Index")
-    </p>
-</div>
+</body>
+<script>
+    $('#login-modal').on('hidden.bs.modal', function () {
+        window.location.replace("http://localhost:63447/");
+    })
+</script>
+
+
+
+

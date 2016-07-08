@@ -34,24 +34,39 @@ namespace WSFrameworkFrontend.Controllers
         [HttpGet]
         public async Task<ActionResult> Create()
         {
-            List<category> categories = new List<category>();
-            IList<CategoryModel> currentCategories = await categoryService.GetAllCategories();
-            foreach (var category in currentCategories)
+            if (IsUserLoggedIn())
             {
-                category categoryToAdd = new category();
-                categoryToAdd.Id = category.Id;
-                categoryToAdd.name = category.Title;
-                categories.Add(categoryToAdd);
-            }
+                List<category> categories = new List<category>();
+                IList<CategoryModel> currentCategories = await categoryService.GetAllCategories();
+                foreach (var category in currentCategories)
+                {
+                    category categoryToAdd = new category();
+                    categoryToAdd.Id = category.Id;
+                    categoryToAdd.name = category.Title;
+                    categories.Add(categoryToAdd);
+                }
 
-            ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
-            return View();
+                ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
+                return View();
+            }
+            else
+            {
+                return Redirect("/login/index");
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult> Create(ProductCreateViewModel product)
         {
-            long shopId = (await shopService.GetOwnShop()).Id;
+            ShopModel shop = new ShopModel();
+            shop = (await shopService.GetOwnShop());
+            if(shop == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "No webshop on account. Create a webshop before creating products!";
+                return View("Failure", resp);
+            }
+            long shopId = shop.Id;
             var response = await productService.CreateProduct(product, shopId);
             if (response != null)
             {
@@ -80,25 +95,32 @@ namespace WSFrameworkFrontend.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(long Id)
         {
-            var response = await productService.getProduct(Id);
-            if (response == null)
+            if (IsUserLoggedIn())
             {
-                HttpResponseModel resp = new HttpResponseModel();
-                resp.ReasonMessage = "Product not found.";
-                return View("Failure", resp);
-            }
-            List<category> categories = new List<category>();
-            IList<CategoryModel> test = await categoryService.GetAllCategories();
-            foreach (var category in test)
-            {
-                category categoryToAdd = new category();
-                categoryToAdd.Id = category.Id;
-                categoryToAdd.name = category.Title;
-                categories.Add(categoryToAdd);
-            }
+                var response = await productService.getProduct(Id);
+                if (response == null)
+                {
+                    HttpResponseModel resp = new HttpResponseModel();
+                    resp.ReasonMessage = "Product not found.";
+                    return View("Failure", resp);
+                }
+                List<category> categories = new List<category>();
+                IList<CategoryModel> test = await categoryService.GetAllCategories();
+                foreach (var category in test)
+                {
+                    category categoryToAdd = new category();
+                    categoryToAdd.Id = category.Id;
+                    categoryToAdd.name = category.Title;
+                    categories.Add(categoryToAdd);
+                }
 
-            ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
-            return View("Edit", response);
+                ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
+                return View("Edit", response);
+            }
+            else
+            {
+                return Redirect("/login/index");
+            }
         }
 
         [HttpPost]
@@ -142,7 +164,19 @@ namespace WSFrameworkFrontend.Controllers
         [HttpGet]
         public async Task<ActionResult> Browse()
         {
-            return View(await productService.GetOwnProducts());
+            if (IsUserLoggedIn())
+                return View(await productService.GetOwnProducts());
+            else
+                return Redirect("/login/index");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Details(long Id)
+        {
+            if (IsUserLoggedIn())
+                return View(await productService.getProduct(Id));
+            else
+                return Redirect("/login/index");
         }
 
         [HttpPost]
@@ -171,6 +205,15 @@ namespace WSFrameworkFrontend.Controllers
                 return View("Failure", resp);
             }
 
+        }
+
+        public bool IsUserLoggedIn()
+        {
+            if (System.Web.HttpContext.Current.Session["AccessToken"] == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
