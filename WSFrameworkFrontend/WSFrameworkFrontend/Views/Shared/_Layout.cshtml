@@ -7,6 +7,7 @@
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jscolor.js"></script>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
@@ -32,6 +33,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="/Shop/Create">Create Webshop</a></li>
                             <li><a href="/Shop/Edit">Manage Webshop</a></li>
+                            <li><a href="/Shop/CreateConfig">Configure Webshop</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/Shop/Browse">Browse Webshops</a></li>
                             <li role="separator" class="divider"></li>
@@ -61,7 +63,7 @@
                 <ul class="nav navbar-nav pull-right">
                     @if (Session["AccessToken"] != null)
                     {
-                        <li><a href="#" onclick="location.href='@Url.Action("Logout", "Login")'">Log out (@HttpContext.Current.Session["UserName"].ToString())</a></li>
+                        <li><a href="#" onclick="location.href='@Url.Action("Logout", "Login")'">Log out (@Request.Cookies["UserName"].Value.ToString())</a></li>
                     }
                     else
                     {

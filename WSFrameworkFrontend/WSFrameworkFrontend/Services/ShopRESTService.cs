@@ -69,6 +69,34 @@ namespace WSFrameworkFrontend.Services
             }
         }
 
+        public async Task<ShopConfigurationModel> CreateShopConfig(ShopConfigurationModel shop)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string content = JsonConvert.SerializeObject(shop).ToString();
+                var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
+
+                var response = await httpClient.PostAsync(uri + "ShopConfigurations", stringContent);
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                var shopResponse = await response.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(shopResponse);
+
+                ShopConfigurationModel ShopConfig = new ShopConfigurationModel();
+                ShopConfig.ShopId = Convert.ToInt64(json["ShopId"]);
+                ShopConfig.BgColor = json["BgColor"].ToString();
+                ShopConfig.MenuColor = json["MenuColor"].ToString();
+                ShopConfig.LayoutId = Convert.ToInt32(json["LayoutId"]);
+
+                return ShopConfig;
+            }
+        }
+
         public async Task<HttpResponseMessage> EditShop(ShopModel shop)
         {
             ShopUpdate shopOut = new ShopUpdate();
@@ -84,6 +112,19 @@ namespace WSFrameworkFrontend.Services
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
 
                 var response = await httpClient.PutAsync(uri + "Shops/"+shop.Id, stringContent);
+                return response;
+            }
+        }
+
+        public async Task<HttpResponseMessage> EditShopConfig(ShopConfigurationModel shopConfig)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string content = JsonConvert.SerializeObject(shopConfig).ToString();
+                var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
+
+                var response = await httpClient.PutAsync(uri + "ShopConfigurations/" + shopConfig.ShopId, stringContent);
                 return response;
             }
         }
@@ -127,6 +168,32 @@ namespace WSFrameworkFrontend.Services
                 Shop.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
 
                 return Shop;
+            }
+        }
+
+        public async Task<ShopConfigurationModel> GetOwnShopConfig()
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
+
+                var response = await httpClient.GetAsync(uri + "ShopConfigurations/Own/");
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                var shopResponse = await response.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(shopResponse);
+
+                ShopConfigurationModel ShopConfig = new ShopConfigurationModel();
+                ShopConfig.ShopId = Convert.ToInt64(json["ShopId"]);
+                ShopConfig.BgColor = json["BgColor"].ToString();
+                ShopConfig.MenuColor = json["MenuColor"].ToString();
+                ShopConfig.LayoutId = Convert.ToInt32(json["LayoutId"]);
+
+                return ShopConfig;
             }
         }
 

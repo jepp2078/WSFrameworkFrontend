@@ -1,0 +1,47 @@
+﻿@model WSFrameworkFrontend.Models.ShopConfigurationModel
+
+@{
+    ViewBag.Title = "Create Configuration";
+}
+<div class="container body-content" style="background:white">
+    <h2>Shop Configuration</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.HiddenFor(model => model.ShopId)
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BgColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="BgColor" id="BgColor" class="jscolor form-control" value="D3D3D3">
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MenuColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="MenuColor" id="MenuColor" class="jscolor form-control" value="222">
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LayoutId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.LayoutId, (SelectList)ViewBag.LayoutList, new { @class = "dropdown-toggle form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        <hr />
+    }
+</div>
