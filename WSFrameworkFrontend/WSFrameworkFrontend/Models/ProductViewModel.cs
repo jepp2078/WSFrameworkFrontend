@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WSFrameworkFrontend.Models
 {
-    public class ProductCreateViewModel
+    public class ProductViewModel
     {
         public long Id { get; set; }
         [Display(Name = "Product Name")]

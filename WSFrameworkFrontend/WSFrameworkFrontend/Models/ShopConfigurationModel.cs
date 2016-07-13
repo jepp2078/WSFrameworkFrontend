@@ -13,6 +13,8 @@ namespace WSFrameworkFrontend.Models
         public string BgColor { get; set; }
         [Display(Name = "Menu Color")]
         public string MenuColor { get; set; }
+        [Display(Name = "Menu Text Color")]
+        public string MenuTextColor { get; set; }
         [Display(Name = "Layout")]
         public Nullable<int> LayoutId { get; set; }
     }

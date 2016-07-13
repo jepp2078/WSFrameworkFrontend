@@ -12,11 +12,74 @@ namespace WSFrameworkFrontend.Controllers
     public class ShopController : Controller
     {
         private ShopRESTService service = new ShopRESTService();
+        private ProductRESTService productService = new ProductRESTService();
 
         [HttpGet]
         public ActionResult Failure(HttpResponseModel input)
         {
             return View(input);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ViewShop(long id)
+        {
+            var response = await service.GetFullShop(id);
+            if (response == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "Webshop doesn't exsist or isn't configured properly.";
+                return View("Failure", resp);
+            }
+            return View(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ViewOwnShop()
+        {
+            if (IsUserLoggedIn())
+            {
+                var response = await service.GetOwnFullShop();
+                if (response == null)
+                {
+                    HttpResponseModel resp = new HttpResponseModel();
+                    resp.ReasonMessage = "Webshop doesn't exsist or isn't configured properly.";
+                    return View("Failure", resp);
+                }
+                return View("ViewShop", response);
+            }
+            else
+            {
+                return Redirect("/login/index");
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ViewShopProduct(long id)
+        {
+            ShopProductViewModel model = new ShopProductViewModel();
+            ProductViewModel product = await productService.getProduct(id);
+            if(product == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "Product ID not present in database.";
+                return View("Failure", resp);
+            }
+            model.Id = product.Id;
+            model.Title = product.Title;
+            model.Description = product.Description;
+            model.DescriptionFull = product.DescriptionFull;
+            model.Views = product.Views;
+            model.IsActive = product.IsActive;
+            model.CreatedAt = product.CreatedAt;
+            model.UpdatedAt = product.UpdatedAt;
+            model.ShopId = product.ShopId;
+            model.Stock = product.Stock;
+            model.Price = product.Price;
+            model.Image = product.Image;
+            model.Category = product.Category;
+            model.CategoryName = product.CategoryName;
+            model.Configuration = await service.GetShopConfig(product.ShopId);
+            return View(model);
         }
 
         [HttpGet]
@@ -128,6 +191,7 @@ namespace WSFrameworkFrontend.Controllers
                 List<layout> layouts = new List<layout>();
                 layouts.Add(new layout { Id = 0, name = "Layout 1" });
                 layouts.Add(new layout { Id = 1, name = "Layout 2" });
+                layouts.Add(new layout { Id = 2, name = "Layout 3" });
                 ViewBag.LayoutList = new SelectList(layouts, "ID", "Name");
                 return View("EditConfig", response);
             }

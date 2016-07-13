@@ -17,16 +17,23 @@
             @Html.HiddenFor(model => model.ShopId)
 
             <div class="form-group">
-                @Html.LabelFor(model => model.BgColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.MenuColor, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <input name="BgColor" id="BgColor"  class="jscolor form-control" value=@Model.BgColor>
+                    <input name="MenuColor" id="MenuColor" class="jscolor form-control" value=@Model.MenuColor>
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.MenuColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.MenuTextColor, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <input name="MenuColor" id="MenuColor" class="jscolor form-control" value=@Model.MenuColor>
+                    <input name="MenuTextColor" id="MenuTextColor" class="jscolor form-control" value=@Model.MenuTextColor>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.BgColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="BgColor" id="BgColor" class="jscolor form-control" value=@Model.BgColor>
                 </div>
             </div>
 
@@ -40,6 +47,15 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Save" class="btn btn-default" />
+                    <script>
+                        $(document).on("keypress", 'form', function (e) {
+                            var code = e.keyCode || e.which;
+                            if (code == 13) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>

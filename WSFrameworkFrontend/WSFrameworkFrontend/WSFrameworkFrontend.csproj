@@ -149,13 +149,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\UriHelper.cs" />
+    <Compile Include="Models\ProductFullModel.cs" />
+    <Compile Include="Models\ShopProductViewModel.cs" />
+    <Compile Include="Models\ShopViewModel.cs" />
     <Compile Include="Models\ShopConfigurationModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\HttpResponseModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
-    <Compile Include="Models\ProductCreateViewModel.cs" />
+    <Compile Include="Models\ProductViewModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\LoginUserModel.cs" />
     <Compile Include="Models\RegUserModel.cs" />
@@ -191,6 +194,8 @@
     <Content Include="Views\Shop\CreateConfig.cshtml" />
     <Content Include="Views\Shop\ConfigSuccess.cshtml" />
     <Content Include="Views\Shop\EditConfig.cshtml" />
+    <Content Include="Views\Shop\ViewShop.cshtml" />
+    <Content Include="Views\Shop\ViewShopProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

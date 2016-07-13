@@ -40,7 +40,7 @@ namespace WSFrameworkFrontend.Services
             public double? Price { get; set; }
         }
 
-        public async Task<ProductModel> CreateProduct(ProductCreateViewModel product, long shopId)
+        public async Task<ProductModel> CreateProduct(ProductViewModel product, long shopId)
         {
             CreateProductModel productOut = new CreateProductModel();
             productOut.Title = product.Title;
@@ -85,7 +85,7 @@ namespace WSFrameworkFrontend.Services
             }
         }
 
-        public async Task<ProductCreateViewModel> getProduct(long id)
+        public async Task<ProductViewModel> getProduct(long id)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -101,7 +101,7 @@ namespace WSFrameworkFrontend.Services
 
                 dynamic json = JsonConvert.DeserializeObject(productResponse);
 
-                ProductCreateViewModel Product = new ProductCreateViewModel();
+                ProductViewModel Product = new ProductViewModel();
                 Product.Id = Convert.ToInt64(json["Id"]);
                 Product.Title = json["Title"].ToString();
                 Product.Description = json["Description"].ToString();
@@ -172,7 +172,7 @@ namespace WSFrameworkFrontend.Services
             }
         }
 
-        public async Task<HttpResponseMessage> EditProduct(ProductCreateViewModel product)
+        public async Task<HttpResponseMessage> EditProduct(ProductViewModel product)
         {
             ProductUpdate productOut = new ProductUpdate();
             productOut.Title = product.Title;
@@ -198,7 +198,7 @@ namespace WSFrameworkFrontend.Services
             }
         }
 
-        public async Task<HttpResponseMessage> ActivateProduct(ProductCreateViewModel product)
+        public async Task<HttpResponseMessage> ActivateProduct(ProductViewModel product)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -212,7 +212,7 @@ namespace WSFrameworkFrontend.Services
         }
 
 
-        public async Task<HttpResponseMessage> DeleteProduct(ProductCreateViewModel product)
+        public async Task<HttpResponseMessage> DeleteProduct(ProductViewModel product)
         {
             using (HttpClient httpClient = new HttpClient())
             {

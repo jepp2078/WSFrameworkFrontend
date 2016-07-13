@@ -91,6 +91,7 @@ namespace WSFrameworkFrontend.Services
                 ShopConfig.ShopId = Convert.ToInt64(json["ShopId"]);
                 ShopConfig.BgColor = json["BgColor"].ToString();
                 ShopConfig.MenuColor = json["MenuColor"].ToString();
+                ShopConfig.MenuTextColor = json["MenuTextColor"].ToString();
                 ShopConfig.LayoutId = Convert.ToInt32(json["LayoutId"]);
 
                 return ShopConfig;
@@ -191,9 +192,193 @@ namespace WSFrameworkFrontend.Services
                 ShopConfig.ShopId = Convert.ToInt64(json["ShopId"]);
                 ShopConfig.BgColor = json["BgColor"].ToString();
                 ShopConfig.MenuColor = json["MenuColor"].ToString();
+                ShopConfig.MenuTextColor = json["MenuTextColor"].ToString();
                 ShopConfig.LayoutId = Convert.ToInt32(json["LayoutId"]);
 
                 return ShopConfig;
+            }
+        }
+
+        public async Task<ShopConfigurationModel> GetShopConfig(long id)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
+
+                var response = await httpClient.GetAsync(uri + "ShopConfigurations/"+id);
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                var shopResponse = await response.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(shopResponse);
+
+                ShopConfigurationModel ShopConfig = new ShopConfigurationModel();
+                ShopConfig.ShopId = Convert.ToInt64(json["ShopId"]);
+                ShopConfig.BgColor = json["BgColor"].ToString();
+                ShopConfig.MenuColor = json["MenuColor"].ToString();
+                ShopConfig.MenuTextColor = json["MenuTextColor"].ToString();
+                ShopConfig.LayoutId = Convert.ToInt32(json["LayoutId"]);
+
+                return ShopConfig;
+            }
+        }
+
+        public async Task<ShopViewModel> GetOwnFullShop()
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
+
+                var response = await httpClient.GetAsync(uri + "Shops/Own/Products");
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                var shopResponse = await response.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(shopResponse);
+
+                ShopViewModel Shop = new ShopViewModel();
+                Shop.Id = Convert.ToInt64(json["Id"]);
+                Shop.UserId = json["UserId"].ToString();
+                Shop.Title = json["Title"].ToString();
+                Shop.Description = json["Description"].ToString();
+                Shop.DescriptionFull = json["DescriptionFull"].ToString();
+                Shop.Views = Convert.ToInt64(json["Views"]);
+                Shop.IsActive = Convert.ToInt32(json["IsActive"]);
+                Shop.CreatedAt = DateTime.Parse(json["CreatedAt"].ToString());
+                Shop.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
+
+                //Get list of products
+                var Products = ((ProductFullModel[])Newtonsoft.Json.JsonConvert.DeserializeObject(json["Products"].ToString(), typeof(ProductFullModel[])));
+                List<ProductViewModel> productList = new List<ProductViewModel>();
+
+                foreach (var product in Products)
+                {
+                    ProductViewModel Product = new ProductViewModel();
+                    Product.Id = product.Id;
+                    Product.Title = product.Title;
+                    Product.Description = product.Description;
+                    Product.DescriptionFull = product.DescriptionFull;
+                    Product.Views = product.Views;
+                    Product.IsActive = product.IsActive;
+                    Product.CreatedAt = product.CreatedAt;
+                    Product.UpdatedAt = product.UpdatedAt;
+                    Product.ShopId = product.ShopId;
+                    Product.Stock = product.Stock;
+                    Product.Price = product.Price;
+
+                    Product.Image = product.Images[0];
+                    
+                    List<long> categoryList = new List<long>();
+                    List<string> categoryNameList = new List<string>();
+
+                    var categories = product.Categories;
+                    foreach (var category in categories)
+                    {
+                        categoryList.Add(category.Id);
+                        categoryNameList.Add(category.Title);
+                    }
+                    Product.Category = categoryList;
+                    Product.CategoryName = categoryNameList;
+
+                    productList.Add(Product);
+                }
+                Shop.Products = productList;
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Current.Session["AccessToken"].ToString());
+
+                response = await httpClient.GetAsync(uri + "ShopConfigurations/Own");
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                shopResponse = await response.Content.ReadAsStringAsync();
+
+                Shop.Configuration = ((ShopConfigurationModel)Newtonsoft.Json.JsonConvert.DeserializeObject(shopResponse, typeof(ShopConfigurationModel)));
+
+                return Shop;
+            }
+        }
+
+        public async Task<ShopViewModel> GetFullShop(long id)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetAsync(uri + "Shops/" + id + "/Products");
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                var shopResponse = await response.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(shopResponse);
+
+                ShopViewModel Shop = new ShopViewModel();
+                Shop.Id = Convert.ToInt64(json["Id"]);
+                Shop.UserId = json["UserId"].ToString();
+                Shop.Title = json["Title"].ToString();
+                Shop.Description = json["Description"].ToString();
+                Shop.DescriptionFull = json["DescriptionFull"].ToString();
+                Shop.Views = Convert.ToInt64(json["Views"]);
+                Shop.IsActive = Convert.ToInt32(json["IsActive"]);
+                Shop.CreatedAt = DateTime.Parse(json["CreatedAt"].ToString());
+                Shop.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
+
+                //Get list of products
+                var Products = ((ProductFullModel[])Newtonsoft.Json.JsonConvert.DeserializeObject(json["Products"].ToString(), typeof(ProductFullModel[])));
+                List<ProductViewModel> productList = new List<ProductViewModel>();
+
+                foreach (var product in Products)
+                {
+                    ProductViewModel Product = new ProductViewModel();
+                    Product.Id = product.Id;
+                    Product.Title = product.Title;
+                    Product.Description = product.Description;
+                    Product.DescriptionFull = product.DescriptionFull;
+                    Product.Views = product.Views;
+                    Product.IsActive = product.IsActive;
+                    Product.CreatedAt = product.CreatedAt;
+                    Product.UpdatedAt = product.UpdatedAt;
+                    Product.ShopId = product.ShopId;
+                    Product.Stock = product.Stock;
+                    Product.Price = product.Price;
+
+                    Product.Image = product.Images[0];
+
+                    List<long> categoryList = new List<long>();
+                    List<string> categoryNameList = new List<string>();
+
+                    var categories = product.Categories;
+                    foreach (var category in categories)
+                    {
+                        categoryList.Add(category.Id);
+                        categoryNameList.Add(category.Title);
+                    }
+                    Product.Category = categoryList;
+                    Product.CategoryName = categoryNameList;
+
+                    productList.Add(Product);
+                }
+                Shop.Products = productList;
+
+                response = await httpClient.GetAsync(uri + "ShopConfigurations/" + id);
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                shopResponse = await response.Content.ReadAsStringAsync();
+
+                Shop.Configuration = ((ShopConfigurationModel)Newtonsoft.Json.JsonConvert.DeserializeObject(shopResponse, typeof(ShopConfigurationModel)));
+
+                return Shop;
             }
         }
 

@@ -56,7 +56,7 @@ namespace WSFrameworkFrontend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(ProductCreateViewModel product)
+        public async Task<ActionResult> Create(ProductViewModel product)
         {
             ShopModel shop = new ShopModel();
             shop = (await shopService.GetOwnShop());
@@ -124,7 +124,7 @@ namespace WSFrameworkFrontend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(ProductCreateViewModel productForEdit)
+        public async Task<ActionResult> Edit(ProductViewModel productForEdit)
         {
             var response = await productService.EditProduct(productForEdit);
             if (response.IsSuccessStatusCode)
@@ -138,7 +138,7 @@ namespace WSFrameworkFrontend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Activate(ProductCreateViewModel productForActivation)
+        public async Task<ActionResult> Activate(ProductViewModel productForActivation)
         {
             if (productForActivation.IsActive == 0)
             {
@@ -180,7 +180,7 @@ namespace WSFrameworkFrontend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(ProductCreateViewModel product)
+        public async Task<ActionResult> Delete(ProductViewModel product)
         {
             var response = await productService.DeleteProduct(product);
             if (response.IsSuccessStatusCode)
@@ -196,7 +196,7 @@ namespace WSFrameworkFrontend.Controllers
                 }
 
                 ViewBag.CategoryList = new SelectList(categories, "ID", "Name");
-                return View("Create");
+                return Redirect("/Product/Create");
             }
             else
             {

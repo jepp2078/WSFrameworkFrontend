@@ -9,14 +9,6 @@
         <hr />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.BgColor)
-            </dt>
-
-            <dd>
-                <input class="jscolor form-control" value=@Model.BgColor disabled>
-            </dd>
-
-            <dt>
                 @Html.DisplayNameFor(model => model.MenuColor)
             </dt>
 
@@ -25,17 +17,29 @@
             </dd>
 
             <dt>
+                @Html.DisplayNameFor(model => model.MenuTextColor)
+            </dt>
+
+            <dd>
+                <input class="jscolor form-control" value=@Model.MenuTextColor disabled>
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BgColor)
+            </dt>
+
+            <dd>
+                <input class="jscolor form-control" value=@Model.BgColor disabled>
+            </dd>
+
+            <dt>
                 @Html.DisplayNameFor(model => model.LayoutId)
             </dt>
 
             <dd>
-                @if (Model.LayoutId == 0)
+                @if (Model.LayoutId >= 0)
                 {
-                    @: Layout 1
-                }
-                else if (Model.LayoutId == 1)
-                {
-                    @: Layout 2
+                    @: Layout @(Model.LayoutId+1)
                 }
             </dd>
 
@@ -44,7 +48,7 @@
     <hr />
     <p>
         @Html.ActionLink("Edit Webshop", "Edit") |
-        @Html.ActionLink("View Webshop", "Details", new { Id = Model.ShopId }) |
+        @Html.ActionLink("View Webshop", "ViewShop", new { Id = Model.ShopId }) |
         @Html.ActionLink("Browse Webshops", "Browse")
     </p>
 </div>
