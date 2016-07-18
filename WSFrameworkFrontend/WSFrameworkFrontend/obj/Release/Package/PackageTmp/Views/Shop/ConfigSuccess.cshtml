@@ -1,0 +1,54 @@
+﻿@model WSFrameworkFrontend.Models.ShopConfigurationModel
+
+@{
+    ViewBag.Title = "Success";
+}
+<div class="container body-content" style="background:white">
+    <h2>Success</h2>
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.MenuColor)
+            </dt>
+
+            <dd>
+                <input class="jscolor form-control" value=@Model.MenuColor disabled>
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MenuTextColor)
+            </dt>
+
+            <dd>
+                <input class="jscolor form-control" value=@Model.MenuTextColor disabled>
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BgColor)
+            </dt>
+
+            <dd>
+                <input class="jscolor form-control" value=@Model.BgColor disabled>
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LayoutId)
+            </dt>
+
+            <dd>
+                @if (Model.LayoutId >= 0)
+                {
+                    @: Layout @(Model.LayoutId+1)
+                }
+            </dd>
+
+        </dl>
+    </div>
+    <hr />
+    <p>
+        @Html.ActionLink("Edit Webshop", "Edit") |
+        @Html.ActionLink("View Webshop", "ViewShop", new { Id = Model.ShopId }) |
+        @Html.ActionLink("Browse Webshops", "Browse")
+    </p>
+</div>

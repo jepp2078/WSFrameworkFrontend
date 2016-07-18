@@ -20,6 +20,74 @@ namespace WSFrameworkFrontend.Controllers
             return View(input);
         }
 
+        class CartProduct
+        {
+            public long id { get; set; }
+            public int amount { get; set; }
+        }
+
+        [HttpPost]
+        public int AddProductToCart(long id, int amount)
+        {
+            CartProduct productToAdd = new CartProduct();
+            productToAdd.id = id;
+            productToAdd.amount = amount;
+
+            if (Session["cart"] == null)
+            {
+                List<CartProduct> cartList = new List<CartProduct>();
+                cartList.Add(productToAdd);
+                Session.Add("cart", cartList);
+            }
+            else
+            {
+                List<CartProduct> cartList = new List<CartProduct>();
+                cartList = (List<CartProduct>) Session["cart"];
+                if(cartList.Find(p => p.id == id) != null)
+                {
+                    int amountOld = cartList.Find(p => p.id == id).amount;
+                    productToAdd.amount = amountOld + amount;
+                    cartList.RemoveAt(cartList.FindIndex(p => p.id == id));
+                }
+                cartList.Add(productToAdd);
+                Session["cart"] = cartList;
+            }
+            return ((List<CartProduct>)Session["cart"]).Count;
+        }
+
+        [HttpPost]
+        public int RemoveProductFromCart(long id, int amount)
+        {
+            CartProduct productToUpdate = new CartProduct();
+            productToUpdate.id = id;
+            productToUpdate.amount = amount;
+
+            List<CartProduct> cartList = new List<CartProduct>();
+            cartList = (List<CartProduct>)Session["cart"];
+            if (cartList.Find(p => p.id == id) != null)
+            {
+                int amountOld = cartList.Find(p => p.id == id).amount;
+                productToUpdate.amount = amountOld - amount;
+                cartList.RemoveAt(cartList.FindIndex(p => p.id == id));
+            }
+            if(productToUpdate.amount > 0)
+            {
+                cartList.Add(productToUpdate);
+            }
+            if(cartList.Count == 0)
+            {
+                Session["cart"] = null;
+                return 0;
+            }
+            else
+            {
+                Session["cart"] = cartList;
+            }
+
+            ViewBag.ProductsInCart = Session["cart"] != null ? ((List<CartProduct>)Session["cart"]).Count : 0;
+            return 1;
+        }
+
         [HttpGet]
         public async Task<ActionResult> ViewShop(long id)
         {
@@ -30,7 +98,41 @@ namespace WSFrameworkFrontend.Controllers
                 resp.ReasonMessage = "Webshop doesn't exsist or isn't configured properly.";
                 return View("Failure", resp);
             }
+            ViewBag.ProductsInCart = Session["cart"] != null ? ((List<CartProduct>)Session["cart"]).Count : 0;
             return View(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ViewCart()
+        {
+            List<CartProduct> cart = ((List<CartProduct>)Session["cart"]);
+            if(cart == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "No products in cart.";
+                return View("Failure", resp);
+            }
+            List<ProductViewModel> productsInCart = new List<ProductViewModel>();
+            double? total = 0;
+            foreach (var product in cart)
+            {
+                ProductViewModel productTemp = await productService.getProduct(product.id);
+                productTemp.Stock = product.amount;
+                total += productTemp.Price * productTemp.Stock;
+                productsInCart.Add(productTemp);
+            }
+
+            if (productsInCart.Count > 0)
+            {
+                var Configuration = await service.GetShopConfig(productsInCart[0].ShopId);
+                ViewBag.BgColor = Configuration.BgColor;
+                ViewBag.MenuColor = Configuration.MenuColor;
+                ViewBag.MenuTextColor = Configuration.MenuTextColor;
+                ViewBag.ProductsInCart = Session["cart"] != null ? ((List<CartProduct>)Session["cart"]).Count : 0;
+                ViewBag.TotalPrice = total;
+                return View(productsInCart);
+            }
+            return null;
         }
 
         [HttpGet]
@@ -45,6 +147,7 @@ namespace WSFrameworkFrontend.Controllers
                     resp.ReasonMessage = "Webshop doesn't exsist or isn't configured properly.";
                     return View("Failure", resp);
                 }
+                ViewBag.ProductsInCart = Session["cart"] != null ? ((List<CartProduct>)Session["cart"]).Count : 0;
                 return View("ViewShop", response);
             }
             else
@@ -79,6 +182,8 @@ namespace WSFrameworkFrontend.Controllers
             model.Category = product.Category;
             model.CategoryName = product.CategoryName;
             model.Configuration = await service.GetShopConfig(product.ShopId);
+
+            ViewBag.ProductsInCart = Session["cart"] != null ? ((List<CartProduct>)Session["cart"]).Count : 0;
             return View(model);
         }
 

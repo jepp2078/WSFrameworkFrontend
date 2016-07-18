@@ -1,0 +1,64 @@
+﻿@model WSFrameworkFrontend.Models.ShopConfigurationModel
+
+@{
+    ViewBag.Title = "Edit Configuration";
+}
+<div class="container body-content" style="background:white">
+
+    <h2>Edit your Webshop Configuration</h2>
+    <h4>Current information</h4>
+    <hr />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ShopId)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MenuColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="MenuColor" id="MenuColor" class="jscolor form-control" value=@Model.MenuColor>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MenuTextColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="MenuTextColor" id="MenuTextColor" class="jscolor form-control" value=@Model.MenuTextColor>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.BgColor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input name="BgColor" id="BgColor" class="jscolor form-control" value=@Model.BgColor>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LayoutId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.LayoutId, (SelectList)ViewBag.LayoutList, new { @class = "dropdown-toggle form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                    <script>
+                        $(document).on("keypress", 'form', function (e) {
+                            var code = e.keyCode || e.which;
+                            if (code == 13) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    }
+    <hr />
+</div>

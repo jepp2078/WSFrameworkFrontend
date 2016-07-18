@@ -1,0 +1,316 @@
+﻿@model WSFrameworkFrontend.Models.ShopViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jscolor.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+</head>
+<body style="background-color:#@Model.Configuration.BgColor">
+    <div class="navbar navbar-inverse navbar-fixed-top sticky" role="navigation" style="border-color:#@Model.Configuration.MenuColor; background-color:#@Model.Configuration.MenuColor; max-height: 50px;">
+        <div class="container">
+            <div class="navbar-header">
+                <label class="navbar-brand navbar-title" style="float:none;color:#@Model.Configuration.MenuTextColor;">@Model.Title</label>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a style="color:#@Model.Configuration.MenuTextColor;" href="#">Contact</a></li>
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    <li><a style="color:#@Model.Configuration.MenuTextColor;" href="#">Go to Cart(0)</a></li>
+                    <li><a style="color:#@Model.Configuration.MenuTextColor;" href="#">Checkout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <div class="container body-content" style="background:white">
+        <hr />
+        <div style="text-align:center">
+            <h3>@Model.Description</h3>
+            <h4><i>@Model.DescriptionFull</i></h4>
+        </div>
+        
+        <hr />
+        <div class="container">
+            @switch (Model.Configuration.LayoutId)
+            {
+                case 2:
+                    bool switchSide = true;
+                    foreach (var product in Model.Products)
+                    {
+                        if (switchSide)
+                        {
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
+                                    <br />
+                                    <div class="input-group" style="min-width: 270px;">
+                                        <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success">Add to Cart</button>
+                                            <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <h2>@product.Title</h2>
+                                    <b><i>Categories:</i></b>
+                                    @for (int i = 0; i < product.CategoryName.Count; i++)
+                                    {
+                                        if (i == product.CategoryName.Count - 1)
+                                        {
+                                            <i>@product.CategoryName[i]</i>
+                                        }
+                                        else
+                                        {
+                                            <i>@product.CategoryName[i],</i>
+                                        }
+                                    }
+                                    <hr />
+
+                                    <h3>$@product.Price</h3>
+                                    <i>Stock: @product.Stock pcs.</i>
+                                    <hr />
+
+                                    <b>Description</b>
+                                    <br />
+                                    @product.Description
+                                    <br />
+                                    <br />
+                                    <b>Details</b>
+                                    <br />
+                                    @product.DescriptionFull
+                                </div>
+                            </div>
+                            <hr />
+                            switchSide = false;
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h2>@product.Title</h2>
+                                    <b><i>Categories:</i></b>
+                                    @for (int i = 0; i < product.CategoryName.Count; i++)
+                                    {
+                                        if (i == product.CategoryName.Count - 1)
+                                        {
+                                            <i>@product.CategoryName[i]</i>
+                                        }
+                                        else
+                                        {
+                                            <i>@product.CategoryName[i],</i>
+                                        }
+                                    }
+                                    <hr />
+
+                                    <h3>$@product.Price</h3>
+                                    <i>Stock: @product.Stock pcs.</i>
+                                    <hr />
+
+                                    <b>Description</b>
+                                    <br />
+                                    @product.Description
+                                    <br />
+                                    <br />
+                                    <b>Details</b>
+                                    <br />
+                                    @product.DescriptionFull
+                                </div>
+                                <div class="col-md-3">
+                                    <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
+                                    <br />
+                                    <div class="input-group" style="min-width: 270px;">
+                                        <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success">Add to Cart</button>
+                                            <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            switchSide = true;
+                        }
+                    }
+
+                    break;
+                case 1:
+                    foreach (var product in Model.Products)
+                    {
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h2>@product.Title</h2>
+                                <b><i>Categories:</i></b>
+                                @for (int i = 0; i < product.CategoryName.Count; i++)
+                                {
+                                    if (i == product.CategoryName.Count - 1)
+                                    {
+                                        <i>@product.CategoryName[i]</i>
+                                    }
+                                    else
+                                    {
+                                        <i>@product.CategoryName[i],</i>
+                                    }
+                                }
+                                <hr />
+
+                                <h3>$@product.Price</h3>
+                                <i>Stock: @product.Stock pcs.</i>
+                                <hr />
+
+                                <b>Description</b>
+                                <br />
+                                @product.Description
+                                <br />
+                                <br />
+                                <b>Details</b>
+                                <br />
+                                @product.DescriptionFull
+                            </div>
+                            <div class="col-md-3">
+                                <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
+                                <br />
+                                <div class="input-group" style="min-width: 270px;">
+                                    <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-success">Add to Cart</button>
+                                        <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+                    break;
+                case 0:
+                    foreach (var product in Model.Products)
+                    {
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
+                                <br />
+                                <div class="input-group" style="min-width: 270px;">
+                                    <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-success">Add to Cart</button>
+                                        <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <h2>@product.Title</h2>
+                                <b><i>Categories:</i></b>
+                                @for (int i = 0; i < product.CategoryName.Count; i++)
+                                {
+                                    if (i == product.CategoryName.Count - 1)
+                                    {
+                                        <i>@product.CategoryName[i]</i>
+                                    }
+                                    else
+                                    {
+                                        <i>@product.CategoryName[i],</i>
+                                    }
+                                }
+                                <hr />
+
+                                <h3>$@product.Price</h3>
+                                <i>Stock: @product.Stock pcs.</i>
+                                <hr />
+
+                                <b>Description</b>
+                                <br />
+                                @product.Description
+                                <br />
+                                <br />
+                                <b>Details</b>
+                                <br />
+                                @product.DescriptionFull
+                            </div>
+                        </div>
+                        <hr />
+                    }
+
+                    break;
+
+                default:
+                    foreach (var product in Model.Products)
+                    {
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
+                                <br />
+                                <div class="input-group" style="min-width: 270px;">
+                                    <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-success">Add to Cart</button>
+                                        <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <h2>@product.Title</h2>
+                                <b><i>Categories:</i></b>
+                                @for (int i = 0; i < product.CategoryName.Count; i++)
+                                {
+                                    if (i == product.CategoryName.Count - 1)
+                                    {
+                                        <i>@product.CategoryName[i]</i>
+                                    }
+                                    else
+                                    {
+                                        <i>@product.CategoryName[i],</i>
+                                    }
+                                }
+                                <hr />
+
+                                <h3>$@product.Price</h3>
+                                <i>Stock: @product.Stock pcs.</i>
+                                <hr />
+
+                                <b>Description</b>
+                                <br />
+                                @product.Description
+                                <br />
+                                <br />
+                                <b>Details</b>
+                                <br />
+                                @product.DescriptionFull
+                            </div>
+                        </div>
+                        <hr />
+                    }
+                    break;
+            }
+            
+        </div>
+        <footer style="text-align:center">
+            <i>@Model.Title | Last updated @Model.UpdatedAt</i>
+            <hr />
+            
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+﻿@model WSFrameworkFrontend.Models.HttpResponseModel
+
+@{
+    ViewBag.Title = "Failure";
+}
+<div class="container body-content" style="background:white">
+
+    <h2>Request failed</h2>
+
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ReasonMessage)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReasonMessage)
+            </dd>
+
+        </dl>
+    </div>
+</div>

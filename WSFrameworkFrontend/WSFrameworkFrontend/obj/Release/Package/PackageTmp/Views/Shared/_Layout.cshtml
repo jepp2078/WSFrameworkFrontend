@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - WSFramework</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jscolor.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+</head>
+<body style="background-color:#d3d3d3">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("WSFramework", "Index", "Home", new { area = "" }, new { @class = "navbar-brand navbar-title" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Webshops <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/Shop/Create">Create Webshop</a></li>
+                            <li><a href="/Shop/Edit">Manage Webshop</a></li>
+                            <li><a href="/Shop/CreateConfig">Configure Webshop</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/Shop/Browse">Browse Webshops</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/Shop/ViewOwnShop">Your Webshop</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Products <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/Product/Create">Create Product</a></li>
+                            <li><a href="/Product/Browse">Manage Products</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Orders <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Manage Orders</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Customers <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Manage Customers</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    @if (Session["AccessToken"] != null)
+                    {
+                        <li><a href="#" onclick="location.href='@Url.Action("Logout", "Login")'">Log out (@Request.Cookies["UserName"].Value.ToString())</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="#" onclick="location.href='@Url.Action("Index", "Login")'">Log In</a></li>
+                    }
+                </ul>
+                <form class="navbar-form pull-right" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Go!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <script>
+        $('#logOut').on('click', function (event) {
+            console.log("test");
+            document.cookie = "AccessToken" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        });
+    </script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+
+</html>
