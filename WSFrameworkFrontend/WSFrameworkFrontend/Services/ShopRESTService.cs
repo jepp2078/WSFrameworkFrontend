@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using WSFrameworkFrontend.Helpers;
 using WSFrameworkFrontend.Models;
+using WSFrameworkFrontend.Controllers;
 
 namespace WSFrameworkFrontend.Services
 {
@@ -127,6 +128,71 @@ namespace WSFrameworkFrontend.Services
 
                 var response = await httpClient.PutAsync(uri + "ShopConfigurations/" + shopConfig.ShopId, stringContent);
                 return response;
+            }
+        }
+
+        public async Task<CustomerModel> CreateCustomer(CustomerModel customer)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                customer.ShopId = customer.Id;
+                string content = JsonConvert.SerializeObject(customer).ToString();
+                var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(uri + "Customers", stringContent);
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                var customerResponse = await response.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(customerResponse);
+
+                CustomerModel Customer = new CustomerModel();
+                Customer.Id = Convert.ToInt64(json["Id"]);
+                Customer.Name = json["Name"].ToString();
+                Customer.Phone = json["Phone"].ToString();
+                Customer.Email = json["Email"].ToString();
+                Customer.Address = json["Address"].ToString();
+                Customer.Zip = json["Zip"].ToString();
+                Customer.City = json["City"].ToString();
+                Customer.Country = json["Country"].ToString();
+                Customer.ShopId = Convert.ToInt64(json["ShopId"]);
+
+                return Customer;
+            }
+        }
+
+        public async Task<OrderModel> CreateOrder(ShopController.OrderOut order)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string content = JsonConvert.SerializeObject(order).ToString();
+                var stringContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(uri + "Orders", stringContent);
+                if (response.IsSuccessStatusCode != true)
+                {
+                    return null;
+                }
+
+                var customerResponse = await response.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(customerResponse);
+
+                OrderModel Order = new OrderModel();
+                Order.Id = Convert.ToInt64(json["Id"]);
+                Order.CustomerId = Convert.ToInt64(json["CustomerId"]);
+                Order.ShippingAddress = json["ShippingAddress"].ToString();
+                Order.BillingAddress = json["BillingAddress"].ToString();
+                Order.CreatedAt = DateTime.Parse(json["CreatedAt"].ToString());
+                Order.UpdatedAt = DateTime.Parse(json["UpdatedAt"].ToString());
+                Order.Status = Convert.ToInt32(json["Status"]);
+                Order.ShopId = Convert.ToInt64(json["ShopId"]);
+                Order.Amount = Convert.ToDouble(json["Amount"]);
+
+                return Order;
             }
         }
 

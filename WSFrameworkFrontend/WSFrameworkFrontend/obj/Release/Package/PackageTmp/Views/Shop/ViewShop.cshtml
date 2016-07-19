@@ -32,7 +32,7 @@
                     <li><a style="color:#@Model.Configuration.MenuTextColor;" href="#">Contact</a></li>
                 </ul>
                 <ul class="nav navbar-nav pull-right">
-                    <li><a style="color:#@Model.Configuration.MenuTextColor;" href="#">Go to Cart(0)</a></li>
+                    <li><a style="color:#@Model.Configuration.MenuTextColor;" id="cartAmount" href="/Shop/ViewCart">Cart(@ViewBag.ProductsInCart)</a></li>
                     <li><a style="color:#@Model.Configuration.MenuTextColor;" href="#">Checkout</a></li>
                 </ul>
             </div>
@@ -66,9 +66,9 @@
                                     <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
                                     <br />
                                     <div class="input-group" style="min-width: 270px;">
-                                        <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                        <input type="number" id=@product.Id class="form-control" min="0" max=@product.Stock value="0">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success">Add to Cart</button>
+                                            <button type="button" onclick="addToCart('@product.Id')" class="btn btn-success">Add to Cart</button>
                                             <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
                                         </span>
                                     </div>
@@ -142,9 +142,9 @@
                                     <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
                                     <br />
                                     <div class="input-group" style="min-width: 270px;">
-                                        <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                        <input type="number" id=@product.Id class="form-control" min="0" max=@product.Stock value="0">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success">Add to Cart</button>
+                                            <button type="button" onclick="addToCart('@product.Id')" class="btn btn-success">Add to Cart</button>
                                             <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
                                         </span>
                                     </div>
@@ -193,9 +193,9 @@
                                 <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
                                 <br />
                                 <div class="input-group" style="min-width: 270px;">
-                                    <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                    <input type="number" id=@product.Id class="form-control" min="0" max=@product.Stock value="0">
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-success">Add to Cart</button>
+                                        <button type="button" onclick="addToCart('@product.Id')" class="btn btn-success">Add to Cart</button>
                                         <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
                                     </span>
                                 </div>
@@ -212,9 +212,9 @@
                                 <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
                                 <br />
                                 <div class="input-group" style="min-width: 270px;">
-                                    <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                    <input type="number" id=@product.Id class="form-control" min="0" max=@product.Stock value="0">
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-success">Add to Cart</button>
+                                        <button type="button" onclick="addToCart('@product.Id')" class="btn btn-success">Add to Cart</button>
                                         <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
                                     </span>
                                 </div>
@@ -262,9 +262,9 @@
                                 <img src=@product.Image.ImageUrl style="width:270px; height:auto;">
                                 <br />
                                 <div class="input-group" style="min-width: 270px;">
-                                    <input type="number" class="form-control" min="0" max=@product.Stock value="0">
+                                    <input type="number" id=@product.Id class="form-control" min="0" max=@product.Stock value="0">
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-success">Add to Cart</button>
+                                        <button type="button" onclick="addToCart('@product.Id')" class="btn btn-success">Add to Cart</button>
                                         <a href="/Shop/ViewShopProduct/@product.Id" class="btn btn-default" role="button">View Details</a>
                                     </span>
                                 </div>
@@ -311,6 +311,16 @@
             
         </footer>
     </div>
+    <script type="text/javascript">
+        function addToCart(clicked_id) {
+            var amount = document.getElementById(clicked_id).value;
+            if (amount != 0) {
+                $.post("/Shop/AddProductToCart", { "id": clicked_id, "amount": amount}
+                    , function (data) {
+                        document.getElementById("cartAmount").innerHTML = "Cart(" + data + ")";
+                    });
+            }
+        }
+    </script>
 </body>
-
 </html>

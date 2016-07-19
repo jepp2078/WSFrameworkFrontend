@@ -198,6 +198,9 @@
     <Content Include="Views\Shop\ViewShop.cshtml" />
     <Content Include="Views\Shop\ViewShopProduct.cshtml" />
     <Content Include="Views\Shop\ViewCart.cshtml" />
+    <Content Include="Views\Shop\Customer.cshtml" />
+    <Content Include="Views\Shop\Checkout.cshtml" />
+    <Content Include="Views\Shop\Order.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -20,18 +20,18 @@ namespace WSFrameworkFrontend.Controllers
             return View(input);
         }
 
-        class CartProduct
+        public class CartProduct
         {
-            public long id { get; set; }
-            public int amount { get; set; }
+            public long ProductId { get; set; }
+            public int Quantity { get; set; }
         }
 
         [HttpPost]
         public int AddProductToCart(long id, int amount)
         {
             CartProduct productToAdd = new CartProduct();
-            productToAdd.id = id;
-            productToAdd.amount = amount;
+            productToAdd.ProductId = id;
+            productToAdd.Quantity = amount;
 
             if (Session["cart"] == null)
             {
@@ -43,11 +43,11 @@ namespace WSFrameworkFrontend.Controllers
             {
                 List<CartProduct> cartList = new List<CartProduct>();
                 cartList = (List<CartProduct>) Session["cart"];
-                if(cartList.Find(p => p.id == id) != null)
+                if(cartList.Find(p => p.ProductId == id) != null)
                 {
-                    int amountOld = cartList.Find(p => p.id == id).amount;
-                    productToAdd.amount = amountOld + amount;
-                    cartList.RemoveAt(cartList.FindIndex(p => p.id == id));
+                    int amountOld = cartList.Find(p => p.ProductId == id).Quantity;
+                    productToAdd.Quantity = amountOld + amount;
+                    cartList.RemoveAt(cartList.FindIndex(p => p.ProductId == id));
                 }
                 cartList.Add(productToAdd);
                 Session["cart"] = cartList;
@@ -59,18 +59,18 @@ namespace WSFrameworkFrontend.Controllers
         public int RemoveProductFromCart(long id, int amount)
         {
             CartProduct productToUpdate = new CartProduct();
-            productToUpdate.id = id;
-            productToUpdate.amount = amount;
+            productToUpdate.ProductId = id;
+            productToUpdate.Quantity = amount;
 
             List<CartProduct> cartList = new List<CartProduct>();
             cartList = (List<CartProduct>)Session["cart"];
-            if (cartList.Find(p => p.id == id) != null)
+            if (cartList.Find(p => p.ProductId == id) != null)
             {
-                int amountOld = cartList.Find(p => p.id == id).amount;
-                productToUpdate.amount = amountOld - amount;
-                cartList.RemoveAt(cartList.FindIndex(p => p.id == id));
+                int amountOld = cartList.Find(p => p.ProductId == id).Quantity;
+                productToUpdate.Quantity = amountOld - amount;
+                cartList.RemoveAt(cartList.FindIndex(p => p.ProductId == id));
             }
-            if(productToUpdate.amount > 0)
+            if(productToUpdate.Quantity > 0)
             {
                 cartList.Add(productToUpdate);
             }
@@ -116,8 +116,108 @@ namespace WSFrameworkFrontend.Controllers
             double? total = 0;
             foreach (var product in cart)
             {
-                ProductViewModel productTemp = await productService.getProduct(product.id);
-                productTemp.Stock = product.amount;
+                ProductViewModel productTemp = await productService.getProduct(product.ProductId);
+                productTemp.Stock = product.Quantity;
+                total += productTemp.Price * productTemp.Stock;
+                productsInCart.Add(productTemp);
+            }
+
+            if (productsInCart.Count > 0)
+            {
+                var Configuration = await service.GetShopConfig(productsInCart[0].ShopId);
+                ViewBag.BgColor = Configuration.BgColor;
+                ViewBag.MenuColor = Configuration.MenuColor;
+                ViewBag.MenuTextColor = Configuration.MenuTextColor;
+                ViewBag.ProductsInCart = Session["cart"] != null ? ((List<CartProduct>)Session["cart"]).Count : 0;
+                ViewBag.TotalPrice = total;
+                return View(productsInCart);
+            }
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Customer(long id)
+        {
+            List<CartProduct> cart = ((List<CartProduct>)Session["cart"]);
+            if (cart == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "No products to checkout.";
+                return View("Failure", resp);
+            }
+
+            var Configuration = await service.GetShopConfig(id);
+            ViewBag.BgColor = Configuration.BgColor;
+            ViewBag.MenuColor = Configuration.MenuColor;
+            ViewBag.MenuTextColor = Configuration.MenuTextColor;
+            ViewBag.ProductsInCart = Session["cart"] != null ? ((List<CartProduct>)Session["cart"]).Count : 0;
+            ViewBag.ShopId = id;
+            return View();
+        }
+
+        public class OrderOut
+        {
+            public long CustomerId { get; set; }
+            public long ShopId { get; set; }
+            public string ShippingAddress { get; set; }
+            public string BillingAddress { get; set; }
+            public IList<CartProduct> Products { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Customer(CustomerModel customer)
+        {
+            var customerResponse = await service.CreateCustomer(customer);
+            if(customerResponse == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "Something went wrong.";
+                return View("Failure", resp);
+            }
+
+            OrderOut order = new OrderOut();
+            List<CartProduct> products = ((List<CartProduct>)Session["cart"]);
+            order.CustomerId = customerResponse.Id;
+            order.ShopId = customer.ShopId;
+            order.ShippingAddress = customer.Address;
+            order.BillingAddress = customer.Address;
+            order.Products = products;
+
+            var orderResponse = await service.CreateOrder(order);
+
+            if (orderResponse == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "Something went wrong.";
+                return View("Failure", resp);
+            }
+
+            Session["cart"] = null;
+            var Configuration = await service.GetShopConfig(customer.ShopId);
+            ViewBag.BgColor = Configuration.BgColor;
+            ViewBag.MenuColor = Configuration.MenuColor;
+            ViewBag.MenuTextColor = Configuration.MenuTextColor;
+            ViewBag.ProductsInCart = 0;
+
+            return View("Order", orderResponse);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Checkout()
+        {
+            List<CartProduct> cart = ((List<CartProduct>)Session["cart"]);
+            if (cart == null)
+            {
+                HttpResponseModel resp = new HttpResponseModel();
+                resp.ReasonMessage = "No products to checkout.";
+                return View("Failure", resp);
+            }
+            List<ProductViewModel> productsInCart = new List<ProductViewModel>();
+            double? total = 0;
+            foreach (var product in cart)
+            {
+                ProductViewModel productTemp = await productService.getProduct(product.ProductId);
+                productTemp.Stock = product.Quantity;
                 total += productTemp.Price * productTemp.Stock;
                 productsInCart.Add(productTemp);
             }

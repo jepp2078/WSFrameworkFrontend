@@ -85,7 +85,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/26/2016 16:29:02</publishTime>
     </File>
     <File Include="bin/WSFrameworkFrontend.dll">
-      <publishTime>07/14/2016 11:09:50</publishTime>
+      <publishTime>07/19/2016 10:54:03</publishTime>
     </File>
     <File Include="Content/bootstrap.css">
       <publishTime>05/31/2016 10:18:26</publishTime>
@@ -210,11 +210,14 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Shop/Success.cshtml">
       <publishTime>07/13/2016 13:41:15</publishTime>
     </File>
+    <File Include="Views/Shop/ViewCart.cshtml">
+      <publishTime>07/18/2016 13:16:25</publishTime>
+    </File>
     <File Include="Views/Shop/ViewShop.cshtml">
-      <publishTime>07/13/2016 15:00:58</publishTime>
+      <publishTime>07/18/2016 13:12:29</publishTime>
     </File>
     <File Include="Views/Shop/ViewShopProduct.cshtml">
-      <publishTime>07/13/2016 15:04:33</publishTime>
+      <publishTime>07/18/2016 12:10:07</publishTime>
     </File>
     <File Include="Views/User/Success.cshtml">
       <publishTime>07/08/2016 11:25:18</publishTime>

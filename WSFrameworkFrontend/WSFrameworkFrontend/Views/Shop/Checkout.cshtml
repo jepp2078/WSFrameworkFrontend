@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
+    <title>Checkout</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
@@ -25,12 +25,12 @@
     <div class="navbar navbar-inverse navbar-fixed-top sticky" role="navigation" style="border-color:#@ViewBag.MenuColor; background-color:#@ViewBag.MenuColor; max-height: 50px;">
         <div class="container">
             <div class="navbar-header">
-                <label class="navbar-brand navbar-title" style="float:none;color:#@ViewBag.MenuTextColor;">Your Cart</label>
+                <label class="navbar-brand navbar-title" style="float:none;color:#@ViewBag.MenuTextColor;">Checkout</label>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav pull-right">
-                    <li><a style="color:#@ViewBag.MenuTextColor;" href="#">Cart(@ViewBag.ProductsInCart)</a></li>
-                    <li><a style="color:#@ViewBag.MenuTextColor;" href="/Shop/Checkout">Checkout</a></li>
+                    <li><a style="color:#@ViewBag.MenuTextColor;" href="/Shop/ViewCart">Cart(@ViewBag.ProductsInCart)</a></li>
+                    <li><a style="color:#@ViewBag.MenuTextColor;" href="#">Checkout</a></li>
                 </ul>
             </div>
         </div>
@@ -53,6 +53,9 @@
                 <th style="min-width:150px">
                     @Html.DisplayNameFor(model => model.Price)
                 </th>
+                <th style="min-width:150px">
+                    Total
+                </th>
                 <th></th>
             </tr>
 
@@ -68,14 +71,11 @@
                     <td style="min-width:150px">
                         @Html.DisplayFor(modelItem => item.Price)
                     </td>
+                    <td style="min-width:150px">
+                        $@(item.Price*item.Stock)
+                    </td>
                     <td>
-                        <div class="input-group" style="min-width: 270px;">
-                            <input type="number" id=@item.Id class="form-control pull-right" min="0" max=@item.Stock value="0" style="max-width: 60px;">
-                            <span class="input-group-btn">
-                                <button type="button" onclick="removeFromCart('@item.Id')" class="btn btn-danger">Remove from Cart</button>
-                                <a href="/Shop/ViewShopProduct/@item.Id" class="btn btn-default" role="button">View Details</a>
-                            </span>
-                        </div>
+                        <a href="/Shop/ViewShopProduct/@item.Id" class="btn btn-default" role="button">View Details</a>
                     </td>
                 </tr>
             }
@@ -84,25 +84,10 @@
         <hr />
         <h4>Total Price: $@ViewBag.TotalPrice</h4>
         <hr />
+        <a href="/Shop/Customer/@Model.First().ShopId" class="btn btn-success" role="button">Checkout</a>
         <p style="text-align:center">
             <a href="/Shop/ViewShop/@Model.First().ShopId">Go to Webshop</a>
         </p>
     </div>
-    <script type="text/javascript">
-        function removeFromCart(clicked_id) {
-            var amount = document.getElementById(clicked_id).value;
-            if (amount != 0) {
-                $.post("/Shop/RemoveProductFromCart", { "id": clicked_id, "amount": amount}
-                    , function (data) {
-                        console.log(data);
-                        if (data == 0) {
-                            window.location.replace("/Shop/ViewShop/@Model.First().ShopId")
-                        } else if(data == 1){
-                            window.location.reload();
-                        }
-                    });
-            }
-        }
-    </script>
 </body>
 </html>
