@@ -1,0 +1,58 @@
+﻿@model WSFrameworkFrontend.Models.OrderModel
+
+@{
+    ViewBag.Title = "Success";
+}
+<div class="container body-content" style="background:white">
+    <h2>Success</h2>
+
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ShippingAddress)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ShippingAddress)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BillingAddress)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.BillingAddress)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+            @if (Model.Status == 0)
+            {
+                    @: Pending
+            }   
+            else if (Model.Status == 1)
+            {
+                    @: Completed
+            }
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Amount)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Amount)
+            </dd>
+
+        </dl>
+    </div>
+    <hr />
+    <p>
+        @Html.ActionLink("View Order", "Details", new { Id = Model.Id }) |
+        @Html.ActionLink("View Your Orders", "Browse")
+    </p>
+</div>

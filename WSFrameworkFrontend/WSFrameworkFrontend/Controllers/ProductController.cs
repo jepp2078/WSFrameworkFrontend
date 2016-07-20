@@ -186,8 +186,8 @@ namespace WSFrameworkFrontend.Controllers
             if (response.IsSuccessStatusCode)
             {
                 List<category> categories = new List<category>();
-                IList<CategoryModel> test = await categoryService.GetAllCategories();
-                foreach (var category in test)
+                IList<CategoryModel> allCategories = await categoryService.GetAllCategories();
+                foreach (var category in allCategories)
                 {
                     category categoryToAdd = new category();
                     categoryToAdd.Id = category.Id;

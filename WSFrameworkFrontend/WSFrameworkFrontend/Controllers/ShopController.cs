@@ -13,6 +13,9 @@ namespace WSFrameworkFrontend.Controllers
     {
         private ShopRESTService service = new ShopRESTService();
         private ProductRESTService productService = new ProductRESTService();
+        private OrderRESTService orderService = new OrderRESTService();
+        private CustomerRESTService customerService = new CustomerRESTService();
+
 
         [HttpGet]
         public ActionResult Failure(HttpResponseModel input)
@@ -167,7 +170,7 @@ namespace WSFrameworkFrontend.Controllers
         [HttpPost]
         public async Task<ActionResult> Customer(CustomerModel customer)
         {
-            var customerResponse = await service.CreateCustomer(customer);
+            var customerResponse = await customerService.CreateCustomer(customer);
             if(customerResponse == null)
             {
                 HttpResponseModel resp = new HttpResponseModel();
@@ -183,7 +186,7 @@ namespace WSFrameworkFrontend.Controllers
             order.BillingAddress = customer.Address;
             order.Products = products;
 
-            var orderResponse = await service.CreateOrder(order);
+            var orderResponse = await orderService.CreateOrder(order);
 
             if (orderResponse == null)
             {
